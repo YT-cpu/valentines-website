@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chiru, Be My Valentine 💘</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--pink:#ff4d79;--soft:#fff1f5;--dark:#2b2b2b}
+    *{box-sizing:border-box}
+    body{
+      margin:0;min-height:100vh;font-family:Poppins,sans-serif;
+      background:linear-gradient(180deg,#ffe0ea,#ffc2d1);
+      color:var(--dark);overflow-x:hidden
+    }
+    .wrap{max-width:1100px;margin:auto;padding:16px}
+    .card{background:rgba(255,255,255,.95);border-radius:24px;padding:22px;box-shadow:0 15px 40px rgba(0,0,0,.15)}
+    h1{font-family:Pacifico;font-size:clamp(2.2rem,7vw,3.2rem);margin:0 0 10px;color:var(--pink);text-align:center}
+    p.lead{text-align:center}
+    .hero{position:relative;border-radius:22px;overflow:hidden;height:260px}
+    .hero img{width:100%;height:100%;object-fit:cover}
+    .overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.55));display:flex;align-items:flex-end;justify-content:center;padding:18px}
+    .overlay h2{color:#fff;font-family:Pacifico}
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+    .gallery img{width:100%;height:120px;object-fit:cover;border-radius:14px}
+    @media(max-width:600px){.gallery{grid-template-columns:repeat(2,1fr)}}
+    .cta{display:flex;gap:14px;justify-content:center;margin-top:22px}
+    button{border:none;padding:14px 24px;border-radius:999px;font-size:1rem;font-weight:600;cursor:pointer}
+    .yes{background:var(--pink);color:#fff}
+    .no{background:#ffe3ea}
+    .secret{display:none;margin-top:22px;padding:18px;border-radius:18px;background:var(--soft);text-align:center}
+    .loader{display:none;position:fixed;inset:0;background:#000;color:#fff;z-index:9999;align-items:center;justify-content:center;font-size:1.4rem;font-family:Pacifico}
+    .dare{display:none;position:fixed;inset:0;z-index:9998}
+    .dare img{width:100%;height:100%;object-fit:cover}
+    .dare h3{position:absolute;bottom:24px;width:100%;text-align:center;color:#fff;font-family:Pacifico;font-size:2.4rem;text-shadow:0 6px 20px rgba(0,0,0,.7)}
+    .heart{position:fixed;bottom:-20px;font-size:18px;animation:floatUp 6s linear forwards}
+    @keyframes floatUp{to{transform:translateY(-110vh);opacity:0}}
+    .secret-msg{display:none;margin-top:10px;font-size:.9rem;color:#ff4d79}
+  </style>
+</head>
+<body>
+
+<audio id="bgMusic" loop>
+  <source src="music/song.mp3" type="audio/mpeg">
+</audio>
+
+<div class="loader" id="loader">Decision processing… 💭</div>
+
+<div class="wrap">
+  <section class="card">
+    <h1>Chiru 💖</h1>
+    <p class="lead">So… I made a whole website just to ask you 🥹</p>
+
+    <div class="hero">
+      <img src="photos/hero.jpg" alt="hero">
+      <div class="overlay"><h2>Will you be my Valentine?</h2></div>
+    </div>
+
+    <div class="gallery">
+      <img src="photos/memory1.jpg">
+      <img src="photos/memory2.jpg">
+      <img src="photos/memory3.jpg">
+    </div>
+
+    <div class="cta">
+      <button class="yes" onclick="sayYes()">YES 💘</button>
+      <button class="no" id="noBtn">No 🙄</button>
+    </div>
+
+    <div style="margin-top:20px">
+      <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/3eP13S8DkBSeALWn7j2sbr" width="100%" height="152" allow="autoplay; encrypted-media"></iframe>
+    </div>
+
+    <div class="secret" id="secret">
+      <h3>You said YES 😭💖</h3>
+      <p>That makes me the luckiest person alive.</p>
+      <p class="secret-msg" id="secretMsg">(Long-press me 👀) I love you more than words.</p>
+    </div>
+
+    <div class="dare" id="dare">
+      <img src="photos/bad.jpg" alt="How dare you">
+      <h3>How dare you 😤</h3>
+    </div>
+  </section>
+</div>
+
+<script>
+  const noBtn = document.getElementById('noBtn');
+  let noCount = 0;
+
+  noBtn.onclick = () => {
+    noCount++;
+    if (noCount === 1) {
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = Math.random() * 80 + 'vw';
+      noBtn.style.top = Math.random() * 80 + 'vh';
+    } else {
+      const dare = document.getElementById('dare');
+      dare.style.display = 'block';
+      dare.style.inset = '0';
+      noBtn.style.display = 'none';
+    }
+  };
+
+  function sayYes() {
+    // vibration feedback
+    if (navigator.vibrate) navigator.vibrate([120, 60, 120]);
+
+    // play song on YES (mobile safe)
+    const music = document.getElementById('bgMusic');
+    if (music) {
+      music.currentTime = 0;
+      music.play().catch(() => {});
+    }
+
+    // show fake loading screen
+    document.getElementById('loader').style.display = 'flex';
+
+    setTimeout(() => {
+      document.getElementById('loader').style.display = 'none';
+      document.getElementById('secret').style.display = 'block';
+
+      // heart rain
+      for (let i = 0; i < 30; i++) {
+        const h = document.createElement('div');
+        h.className = 'heart';
+        h.innerText = '💖';
+        h.style.left = Math.random() * 100 + 'vw';
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 6000);
+      }
+    }, 2000);
+  }
+
+  // long press / touch reveal
+  const secret = document.getElementById('secret');
+  secret.addEventListener('touchstart', () => {
+    document.getElementById('secretMsg').style.display = 'block';
+  });
+
+  // ensure audio allowed on mobile
+  document.body.addEventListener('click', () => {
+    const m = document.getElementById('bgMusic');
+    if (m && m.paused) m.play();
+  }, { once: true });
+</script>
+</body>
+</html>
